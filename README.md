@@ -18,10 +18,14 @@ gree unity-webview 는 태그가 없는 git 패키지라 이 패키지의 의존
     "com.geuneda.webview": "https://github.com/geuneda/geuneda-webview.git",
     "com.geuneda.webview.gree": "https://github.com/geuneda/geuneda-webview-gree.git",
     "com.unity.ugui": "2.0.0",
-    "net.gree.unity-webview": "https://github.com/gree/unity-webview.git?path=/dist/package#20f14061ca4b45e8490c1e89e00684a5d3ed6be0"
+    "net.gree.unity-webview": "https://github.com/gree/unity-webview.git?path=/dist/package-nofragment#20f14061ca4b45e8490c1e89e00684a5d3ed6be0"
   }
 }
 ```
+
+- **`dist/package-nofragment` 를 씁니다.** 기본 `dist/package` 는 Android 에 미디어 읽기 권한(`READ_MEDIA_IMAGES`·`READ_MEDIA_VIDEO`·`READ_MEDIA_AUDIO`), FileProvider, androidx core 를 넣어 Google Play 권한 정책에 걸릴 수 있습니다. nofragment 는 이것들을 넣지 않고, 같은 커밋으로 Android 에뮬레이터(상호 운용·POST·뒤로가기·영역), iOS 18.6 시뮬레이터(열기·글자 왕복·허용 밖 이동 차단·영역), macOS 에디터(상호 운용)에서 기본 package 와 같은 결과로 통과했습니다(2026-10-17).
+- 페이지에서 파일 입력(`<input type="file">`, 사진 고르기)이 필요하면 기본 `dist/package` 를 씁니다(그 권한과 FileProvider 가 파일 선택에 쓰임).
+- 시험용 http 페이지(`http://127.0.0.1` 등)를 Android 에서 열려면 Scripting Define Symbols 에 `UNITYWEBVIEW_ANDROID_USES_CLEARTEXT_TRAFFIC` 를 넣습니다. Player Settings 의 `insecureHttpOption` 만으로는 gree 웹뷰가 http 를 열지 않습니다. 운영 페이지는 https 를 씁니다.
 
 gree unity-webview 의 라이선스는 zlib 입니다. 플랫폼별 빌드 설정(Android 하드웨어 가속, iOS WebKit 등)은 gree 의 README 와 빌드 후처리를 따릅니다.
 
@@ -55,7 +59,7 @@ var webView = new WebViewService(new WebViewServiceOptions
 
 ## 테스트
 
-`GreeWebViewInteropTest`(PlayMode, 명시 실행)는 실제 gree 웹뷰로 페이지와 왕복합니다: 열기(키 연결), `+`·`%`·한글·U+2028·따옴표 왕복, 모르는 명령, 이벤트, 허용 밖 이동 차단, 키를 모르는 sandbox iframe 의 명령 차단.
+`GreeWebViewInteropTest`(PlayMode, 명시 실행)는 실제 gree 웹뷰로 페이지와 왕복합니다: 열기(키 연결), `+`·`%`·한글·U+2028·따옴표 왕복, 모르는 명령, Unity 가 보낸 결과·이벤트의 짝 없는 서로게이트·이모지·U+2028(코드 단위 그대로 오는지, webview 0.2.0 의 ASCII 스크립트), 이벤트, 허용 밖 이동 차단, 키를 모르는 sandbox iframe 의 명령 차단. 2026-10-17 macOS 에디터(gree `dist/package-nofragment` 20f14061)에서 통과했고, webview 0.1.0 에서는 짝 없는 서로게이트 결과가 `ArgumentException`(Illegal byte sequence)으로 사라져 실패합니다.
 
 ```bash
 # com.geuneda.webview 패키지 루트에서

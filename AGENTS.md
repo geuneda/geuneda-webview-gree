@@ -7,7 +7,7 @@
 - **Unity**: 2021.3+
 - **의존성**: `com.geuneda.webview`. gree unity-webview(`net.gree.unity-webview`, 어셈블리 `unity-webview`, 네임스페이스 `Gree.UnityWebView`)는 태그가 없는 git 패키지라 의존성으로 넣지 않고 versionDefines 로 켭니다(ads.max 와 같은 방식). gree 는 uGUI 가 필요합니다
 - **역할**: `IWebViewFactory`/`IWebViewNative` 를 gree `WebViewObject` 로 구현합니다. 판정·보안 규칙은 `com.geuneda.webview` 에 있고 여기에는 넣지 않습니다(D3)
-- **확인한 gree 커밋**: `20f14061ca4b45e8490c1e89e00684a5d3ed6be0`(2026-10-15)
+- **확인한 gree 커밋**: `20f14061ca4b45e8490c1e89e00684a5d3ed6be0`(2026-10-15). 설치 경로는 `dist/package-nofragment` 입니다(기본 `dist/package` 는 Android 에 미디어 읽기 권한·FileProvider·androidx core 를 넣음). 같은 커밋의 nofragment 로 2026-10-17 Android 에뮬레이터, iOS 18.6 시뮬레이터(IL2CPP), macOS 에디터에서 확인했습니다
 
 ## 2. 구조
 
@@ -27,11 +27,13 @@
 - **메시지 디코딩**: gree 의 `CallFromJS` 는 Android 가 아니면 `UnEscapeURL` 을 합니다. JS 파일이 그 경로(`webkit.messageHandlers`)에서 URL 인코딩해 보내므로 어댑터는 받은 글을 그대로 넘깁니다. gree 를 올릴 때 이 동작이 바뀌었는지 상호 운용 테스트로 확인합니다.
 - **시작 알림을 넘김**: `started` 를 `OnPageStarted` 로 넘깁니다. gree Android 의 이동 제한은 `shouldOverrideUrlLoading` 에만 있어 POST 이동은 막지 못하고, 그 이동은 `onPageStarted` 로만 알 수 있습니다(서비스가 닫음, 리뷰 2회차).
 - **버린 뒤 콜백 무시**: `Dispose` 뒤에 온 gree 콜백은 넘기지 않습니다(서비스도 세션으로 거름).
+- **스크립트 글자**: `EvaluateJS` 의 문자열은 네이티브로 넘어가며 UTF-8 로 바뀝니다(iOS `[NSString stringWithUTF8String:]` 은 잘못된 UTF-8 이면 nil, macOS Mono 마샬링은 `ArgumentException`). 서비스가 ASCII 스크립트만 넘기므로(webview 0.2.0) 어댑터는 그대로 넘깁니다.
+- **http 시험 페이지**: gree Android 는 `UNITYWEBVIEW_ANDROID_USES_CLEARTEXT_TRAFFIC` define 이 있어야 http 를 엽니다(`insecureHttpOption` 만으로는 안 됨).
 - **static 가변 상태 금지**(D2). 이 패키지에는 static 필드가 없습니다.
 
 ## 4. 테스트
 
-- PlayMode `Geuneda.WebView.Gree.Tests.PlayMode`(gree 가 있을 때만 컴파일). `GreeWebViewInteropTest` 는 명시 실행이고 macOS 에디터의 그래픽 장치가 필요합니다(`-nographics` 불가). `com.geuneda.webview` 의 `Web~` 를 정적 서버로 띄우고 `GEUNEDA_WEBVIEW_INTEROP_URL=http://127.0.0.1:5700/tests/interop.html`.
+- PlayMode `Geuneda.WebView.Gree.Tests.PlayMode`(gree 가 있을 때만 컴파일). `GreeWebViewInteropTest` 는 명시 실행이고 macOS 에디터의 그래픽 장치가 필요합니다(`-nographics` 불가). `com.geuneda.webview` 의 `Web~` 를 정적 서버로 띄우고 `GEUNEDA_WEBVIEW_INTEROP_URL=http://127.0.0.1:5700/tests/interop.html`. Unity 가 보낸 결과·이벤트의 글은 페이지가 코드 단위 16진수로 돌려주므로(페이지 → Unity 는 짝 없는 서로게이트를 U+FFFD 로 받음) 그 값으로 비교합니다. 2026-10-17 macOS 에디터에서 통과, webview 0.1.0 코드로는 실패함을 확인했습니다.
 - 호스트 레포에는 gree 가 없어 이 패키지가 컴파일되지 않습니다. gree 를 넣은 별도 프로젝트에서 확인합니다.
 
 ## 5. 문서
