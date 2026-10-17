@@ -1,0 +1,25 @@
+{
+    "name": "Geuneda.WebView.Gree",
+    "rootNamespace": "Geuneda.WebView.Gree",
+    "references": [
+        "Geuneda.WebView",
+        "unity-webview"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "GEUNEDA_WEBVIEW_GREE"
+    ],
+    "versionDefines": [
+        {
+            "name": "net.gree.unity-webview",
+            "expression": "1.0.0",
+            "define": "GEUNEDA_WEBVIEW_GREE"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,14 @@
+{
+  "name": "com.geuneda.webview.gree",
+  "displayName": "Geuneda WebView gree",
+  "author": "geuneda",
+  "version": "0.1.0",
+  "unity": "2021.3",
+  "license": "MIT",
+  "description": "com.geuneda.webview 의 gree unity-webview(net.gree.unity-webview) 어댑터입니다. 웹뷰를 숨긴 채 만들고, 네이티브가 준비되면 이동 제한(허용 출처 밖 http·https 막기)·여백(화면 비율)·보이기·로드를 마지막 값으로 적용하며, 페이지 메시지·로드 끝·오류를 넘깁니다. 이동 제한을 걸 수 없는 플랫폼에서는 열지 않습니다. Android 강제 다크 모드는 끕니다(페이지가 prefers-color-scheme 으로 처리). gree unity-webview 는 태그가 없는 git 패키지라 의존성으로 넣지 않습니다. 게임이 커밋을 고정해 설치하면 어셈블리가 켜지고, 없으면 아무것도 컴파일하지 않습니다.",
+  "type": "library",
+  "hideInEditor": false,
+  "dependencies": {
+    "com.geuneda.webview": "0.1.0"
+  }
+}

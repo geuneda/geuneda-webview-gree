@@ -1,0 +1,33 @@
+{
+    "name": "Geuneda.WebView.Gree.Tests.PlayMode",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Geuneda.Core",
+        "Geuneda.WebView",
+        "Geuneda.WebView.Gree",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "GEUNEDA_WEBVIEW_GREE"
+    ],
+    "versionDefines": [
+        {
+            "name": "net.gree.unity-webview",
+            "expression": "1.0.0",
+            "define": "GEUNEDA_WEBVIEW_GREE"
+        }
+    ],
+    "noEngineReferences": false
+}
